@@ -41,12 +41,6 @@ public class EventCreationService {
                 Thread.currentThread().interrupt();
                 return;
             }
-            Event event = createEvent();
-            eventStore.add(event);
-            // notify listeners a new event has been created
-            for (NewEventListener listener : listeners) {
-                listener.onEventCreated(event);
-            }
         }
     }
 
