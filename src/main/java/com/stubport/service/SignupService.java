@@ -1,10 +1,14 @@
 package com.stubport.service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import com.stubport.model.User;
+import com.stubport.model.Ticket;
 import java.util.UUID;
-import com.github.javafaker.Faker;
+import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.github.javafaker.Faker;
 
 public class SignupService {
 
@@ -17,17 +21,31 @@ public class SignupService {
 
     public void start() {
         while (true) {
-            User user = createNewUser();
-            userStore.add(user);
+            try {
+                int randomInt = faker.number().numberBetween(0, 10);
+                if (randomInt <= 3) {
+                    User newUser = createNewUser();
+                    userStore.add(newUser);
+                } else {
+                    Thread.sleep(5000);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
         }
     }
 
     public User createNewUser() {
-        String firstName = faker.name().firstName();
+        String name = faker.name().fullName();
         UUID id = UUID.randomUUID();
-        int age = faker.number().numberBetween(18, 55);
-        // String phoneNumber = faker.phoneNumber().toString();
-        // String email = faker.internet().emailAddress();
-        return new User(firstName, id, age);
+        LocalDate dateOfBirth = faker.date()
+                .birthday()
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        String email = faker.internet().safeEmailAddress();
+        String gender = faker.demographic().sex();
+        return new User(name, id, dateOfBirth, email, gender, new CopyOnWriteArrayList<Ticket>());
     }
 }
