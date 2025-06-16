@@ -62,4 +62,8 @@ public class EventCreationService {
         venueName += " " + faker.space().constellation();
         return venueName;
     }
+
+    public void cleanUpPastEvents() {
+        // TODO: remove old events from event store once passed
+    }
 }
