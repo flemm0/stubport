@@ -28,7 +28,8 @@ public class EventCreationService {
         while (true) {
             try {
                 int randomInt = faker.number().numberBetween(0, 10);
-                if (randomInt == 2) {
+                // automatically create 10 events to populate the store upon creation
+                if (randomInt == 2 || eventStore.size() < 10) {
                     Event event = createEvent();
                     eventStore.add(event);
                     for (NewEventListener listener : listeners) {

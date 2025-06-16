@@ -23,7 +23,8 @@ public class SignupService {
         while (true) {
             try {
                 int randomInt = faker.number().numberBetween(0, 10);
-                if (randomInt <= 3) {
+                // automatically create 30 users upon creation
+                if (randomInt <= 3 || userStore.size() < 30) {
                     User newUser = createNewUser();
                     userStore.add(newUser);
                 } else {
